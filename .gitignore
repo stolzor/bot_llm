@@ -10,3 +10,4 @@ config/
 .env
 train_llm/data
 .DS_Store
+test*
