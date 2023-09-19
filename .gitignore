@@ -1,7 +1,7 @@
 venv/
 data/
 .ipynb_checkpoints/
-models/
+./models/
 __pycache__/
 logs/
 config/
