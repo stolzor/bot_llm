@@ -13,9 +13,8 @@ class UsersRepository:
 
     async def add(self) -> Users:
         username: str = "Test"
-        async with self.session as session:
-            user = Users(username=username)
-            await session.add(user)
-            await session.commit()
-            await session.refresh(user)
-            return await user
+        user = Users(username=username)
+        self.session.add(user)
+        await self.session.commit()
+        await self.session.refresh(user)
+        return await user

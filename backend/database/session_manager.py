@@ -9,8 +9,6 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from .settings import Settings
-
 
 # TODO: Add logging
 class DatabaseManager:
@@ -19,10 +17,7 @@ class DatabaseManager:
         self._sessionmaker: Optional[async_sessionmaker] = None
 
     def init(self, db_url: str) -> None:
-        self._engine = create_async_engine(
-            url=db_url,
-            pool_pre_ping=True,
-        )
+        self._engine = create_async_engine(url=db_url, pool_pre_ping=True)
 
         self._sessionmaker = async_sessionmaker(
             bind=self._engine, expire_on_commit=False
@@ -70,13 +65,10 @@ async def get_connect(
         yield connect
 
 
-db_manager = DatabaseManager()
-
-
-if __name__ == "__main__":
-    db_manager = DatabaseManager()
-    settings = Settings()
-    url = settings.database_url.format(
-        user=settings.user, password=settings.password, db_name=settings.db_name
-    )
-    db_manager.init(url)
+# if __name__ == "__main__":
+#     db_manager = DatabaseManager()
+#     settings = Settings()
+#     url = settings.database_url.format(
+#         user=settings.user, password=settings.password, db_name=settings.db_name
+#     )
+#     db_manager.init(url)

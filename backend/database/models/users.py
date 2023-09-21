@@ -17,6 +17,5 @@ class Users(OrmBase):
     )
 
     def __repr__(self) -> str:
-        return (
-            f"Users(id={self.id!r}, username={self.name}, fullname={self.fullname!r})"
-        )
+        return f"Users(id={self.id!r}, username={self.username},\
+                 timecreated={self.trime_created!r})"
