@@ -70,6 +70,9 @@ async def get_connect(
         yield connect
 
 
+db_manager = DatabaseManager()
+
+
 if __name__ == "__main__":
     db_manager = DatabaseManager()
     settings = Settings()

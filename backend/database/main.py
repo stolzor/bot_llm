@@ -1,3 +1,5 @@
+import asyncio
+
 from fastapi import FastAPI
 
 from .containers import Container
@@ -11,16 +13,12 @@ url = settings.database_url.format(
 )
 
 
-def create_app() -> FastAPI:
-    container = Container()
-
-    db = container.db()
-    db.init(url)
-    print("Init complete!")
-    app = FastAPI()
-    app.container = container
-    app.include_router(router)
-    return app
+async def main(container: Container) -> FastAPI:
+    db = await container.session()
+    await db
 
 
-app = create_app()
+app = FastAPI()
+container = Container()
+app.container = asyncio.run_until_complete(main(container))
+app.include_router(router)
