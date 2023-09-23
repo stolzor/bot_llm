@@ -9,6 +9,8 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
+from .models.base import OrmBase
+
 
 # TODO: Add logging
 class DatabaseManager:
@@ -29,6 +31,11 @@ class DatabaseManager:
         await self._engine.dispose()
         self._engine = None
         self._sessionmaker = None
+
+    async def create_all(self) -> None:
+        print("create all")
+        async with self._engine.begin() as conn:
+            await conn.run_sync(OrmBase.metadata.create_all)
 
     @contextlib.asynccontextmanager
     async def session(self) -> AsyncIterator[AsyncSession]:
