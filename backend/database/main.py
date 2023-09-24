@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from .containers import Container
 from .routers.users import router
-from .settings import get_url
+from .settings.database import ServiceDatabaseSettings
 
 
 app = FastAPI()
@@ -12,8 +12,8 @@ app = FastAPI()
 async def start():
     container = Container()
 
-    db_url = get_url()
-    print(db_url)
+    settings = ServiceDatabaseSettings()
+    db_url = settings.postgresql_url
 
     db = container.db_manager()
     db.init(db_url)

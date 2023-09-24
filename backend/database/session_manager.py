@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
+
 from .models.base import OrmBase
 
 
@@ -33,7 +34,6 @@ class DatabaseManager:
         self._sessionmaker = None
 
     async def create_all(self) -> None:
-        print("create all")
         async with self._engine.begin() as conn:
             await conn.run_sync(OrmBase.metadata.create_all)
 
