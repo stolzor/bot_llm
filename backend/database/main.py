@@ -14,7 +14,7 @@ async def start():
 
     settings = ServiceDatabaseSettings()
     db_url = settings.postgresql_url
-
+    print(db_url)
     db = container.db_manager()
     db.init(db_url)
     await db.create_all()
