@@ -1,7 +1,8 @@
-from dependency_injector import providers, containers
+from dependency_injector import containers, providers
 
-from .crud.users_repositories import UsersRepository
-from .session_manager import get_session, DatabaseManager
+from .crud.users import UsersRepository
+from .services.users import UserService
+from .session_manager import DatabaseManager, get_session
 
 
 class Container(containers.DeclarativeContainer):
@@ -9,4 +10,6 @@ class Container(containers.DeclarativeContainer):
 
     db_manager = providers.Singleton(DatabaseManager)
     session = providers.Resource(get_session, db_manager=db_manager)
+
     user_repository = providers.Factory(UsersRepository, session=session)
+    user_service = providers.Factory(UserService, user_repository=user_repository)

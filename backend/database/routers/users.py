@@ -1,16 +1,57 @@
-from fastapi import APIRouter, Depends
-from dependency_injector.wiring import inject, Provide
+from typing import List
 
-from ..crud.users_repositories import UsersRepository
+from dependency_injector.wiring import Provide, inject
+from fastapi import APIRouter, Depends, HTTPException
+
 from ..containers import Container
+from ..schemas.users import User, UserCreate
+from ..services.users import UserService
+from ..utils import orm2dict
+
+router = APIRouter(tags=["users"])
 
 
-router = APIRouter()
-
-
-@router.post("/users")
+@router.post("/users", response_model=User)
 @inject
 async def create_user(
-    user_repository: UsersRepository = Depends(Provide[Container.user_repository]),
+    user: UserCreate,
+    user_service: UserService = Depends(Provide[Container.user_service]),
 ):
-    return await user_repository.add()
+    params = dict(user)
+
+    checker = await user_service.get_user(**params) is not None
+    if checker:
+        raise HTTPException(status_code=400, detail="User exists")
+
+    return await user_service.create_user(**params)
+
+
+@router.get("/users/{user_id}", response_model=User)
+@inject
+async def get_user(
+    user_id: int,
+    user_service: UserService = Depends(Provide[Container.user_service]),
+):
+    params = dict(id=user_id)
+
+    user = await user_service.get_user(**params)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return user
+
+
+@router.get("/users/", response_model=List[User])
+@inject
+async def get_users(
+    limit: int,
+    user_service: UserService = Depends(Provide[Container.user_service]),
+):
+    params = dict(limit=limit)
+
+    users = [i for i in await user_service.get_users(**params)]
+
+    if users is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return orm2dict(users)

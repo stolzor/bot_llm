@@ -4,7 +4,6 @@ from .containers import Container
 from .routers.users import router
 from .settings.database import ServiceDatabaseSettings
 
-
 app = FastAPI()
 
 
@@ -21,6 +20,9 @@ async def start():
 
     await container.session()
     await container.user_repository()
+    await container.user_service()
+
+    app.container = container
     return container
 
 
