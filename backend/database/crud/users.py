@@ -3,7 +3,7 @@ from typing import AsyncContextManager, Callable, List
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..models import Users
+from ..models.users import Users
 
 
 class UsersRepository:

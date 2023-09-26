@@ -12,7 +12,7 @@ class Session(OrmBase):
     id: Mapped[int] = mapped_column(primary_key=True)
     session_id: Mapped[int] = mapped_column(Integer)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    user_message: Mapped[str] = mapped_column(String)
+    user_message: Mapped[str] = mapped_column(String, nullable=True)
     user_date: Mapped[datetime] = mapped_column(DateTime)
     ai_message: Mapped[str] = mapped_column(String)
     ai_date: Mapped[datetime] = mapped_column(DateTime)
