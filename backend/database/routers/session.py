@@ -13,45 +13,45 @@ router = APIRouter(tags=["session"])
 
 @router.post("/session", response_model=Session)
 @inject
-async def create_user(
-    user: SessionCreate,
-    user_service: SessionService = Depends(Provide[Container.user_service]),
+async def create_session(
+    session: SessionCreate,
+    session_service: SessionService = Depends(Provide[Container.session_service]),
 ):
-    params = dict(user)
+    params = dict(session)
 
-    checker = await user_service.get_user(**params) is not None
+    checker = await session_service.get_session(**params) is not None
     if checker:
-        raise HTTPException(status_code=400, detail="User exists")
+        raise HTTPException(status_code=400, detail="Session exists")
 
-    return await user_service.create_user(**params)
+    return await session_service.create_session(**params)
 
 
-@router.get("/users/{user_id}", response_model=Session)
+@router.get("/session/{session_id}", response_model=Session)
 @inject
-async def get_user(
-    user_id: int,
-    user_service: SessionService = Depends(Provide[Container.user_service]),
+async def get_session(
+    session_id: int,
+    session_service: SessionService = Depends(Provide[Container.session_service]),
 ):
-    params = dict(id=user_id)
+    params = dict(id=session_id)
 
-    user = await user_service.get_user(**params)
-    if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+    session = await session_service.get_session(**params)
+    if session is None:
+        raise HTTPException(status_code=404, detail="Session not found")
 
-    return user
+    return session
 
 
-@router.get("/users/", response_model=List[Session])
+@router.get("/session/", response_model=List[Session])
 @inject
-async def get_users(
+async def get_sessions(
     limit: int,
-    user_service: SessionService = Depends(Provide[Container.user_service]),
+    session_service: SessionService = Depends(Provide[Container.session_service]),
 ):
     params = dict(limit=limit)
 
-    users = [i for i in await user_service.get_users(**params)]
+    sessions = [i for i in await session_service.get_sessions(**params)]
 
-    if users is None:
-        raise HTTPException(status_code=404, detail="User not found")
+    if sessions is None:
+        raise HTTPException(status_code=404, detail="Session not found")
 
-    return orm2dict(users)
+    return orm2dict(sessions)
