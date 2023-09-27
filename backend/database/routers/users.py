@@ -3,7 +3,7 @@ from typing import List
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException
 
-from ..containers import Container
+from ..containers.services import Application
 from ..schemas.users import User, UserCreate
 from ..services.users import UserService
 from ..utils import orm2dict
@@ -15,7 +15,7 @@ router = APIRouter(tags=["users"])
 @inject
 async def create_user(
     user: UserCreate,
-    user_service: UserService = Depends(Provide[Container.user_service]),
+    user_service: UserService = Depends(Provide[Application.users.user_service]),
 ):
     params = dict(user)
 
@@ -30,7 +30,7 @@ async def create_user(
 @inject
 async def get_user(
     user_id: int,
-    user_service: UserService = Depends(Provide[Container.user_service]),
+    user_service: UserService = Depends(Provide[Application.users.user_service]),
 ):
     params = dict(id=user_id)
 
@@ -45,7 +45,7 @@ async def get_user(
 @inject
 async def get_users(
     limit: int,
-    user_service: UserService = Depends(Provide[Container.user_service]),
+    user_service: UserService = Depends(Provide[Application.users.user_service]),
 ):
     params = dict(limit=limit)
 

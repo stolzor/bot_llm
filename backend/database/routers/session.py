@@ -3,7 +3,7 @@ from typing import List
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException
 
-from ..containers import Container
+from ..containers.services import Application
 from ..schemas.session import Session, SessionCreate
 from ..services.session import SessionService
 from ..utils import orm2dict
@@ -15,9 +15,12 @@ router = APIRouter(tags=["session"])
 @inject
 async def create_session(
     session: SessionCreate,
-    session_service: SessionService = Depends(Provide[Container.session_service]),
+    session_service: SessionService = Depends(
+        Provide[Application.session.session_service]
+    ),
 ):
     params = dict(session)
+    params["user_date"] = params["user_date"].replace(tzinfo=None)
 
     checker = await session_service.get_session(**params) is not None
     if checker:
@@ -30,7 +33,9 @@ async def create_session(
 @inject
 async def get_session(
     session_id: int,
-    session_service: SessionService = Depends(Provide[Container.session_service]),
+    session_service: SessionService = Depends(
+        Provide[Application.session.session_service]
+    ),
 ):
     params = dict(id=session_id)
 
@@ -45,7 +50,9 @@ async def get_session(
 @inject
 async def get_sessions(
     limit: int,
-    session_service: SessionService = Depends(Provide[Container.session_service]),
+    session_service: SessionService = Depends(
+        Provide[Application.session.session_service]
+    ),
 ):
     params = dict(limit=limit)
 

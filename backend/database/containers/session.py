@@ -5,11 +5,9 @@ from ..services.session import SessionService
 
 
 class SessionContainer(containers.DeclarativeContainer):
-    config = providers.Configuration()
+    database = providers.DependenciesContainer()
 
-    session = providers.DependenciesContainer()
-
-    session_repository = providers.Factory(SessionRepository, session=session)
+    session_repository = providers.Factory(SessionRepository, session=database.session)
     session_service = providers.Factory(
         SessionService, session_repository=session_repository
     )

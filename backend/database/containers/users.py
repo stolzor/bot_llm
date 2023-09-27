@@ -5,9 +5,7 @@ from ..services.users import UserService
 
 
 class UsersContainer(containers.DeclarativeContainer):
-    config = providers.Configuration()
+    database = providers.DependenciesContainer()
 
-    session = providers.DependenciesContainer()
-
-    user_repository = providers.Factory(UsersRepository, session=session)
+    user_repository = providers.Factory(UsersRepository, session=database.session)
     user_service = providers.Factory(UserService, user_repository=user_repository)

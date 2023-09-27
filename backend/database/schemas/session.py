@@ -11,11 +11,12 @@ class SessionBase(BaseModel):
 class SessionCreate(SessionBase):
     user_message: str
     user_date: datetime
+    user_id: int
 
 
 class SessionUpdate(SessionBase):
-    ai_message: str
-    ai_date: datetime
+    ai_message: str | None
+    ai_date: datetime | None
 
 
 class Session(SessionCreate, SessionUpdate):
