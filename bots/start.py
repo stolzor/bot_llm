@@ -4,17 +4,22 @@ from aiogram.utils.token import TokenValidationError
 
 from logger import get_logger
 
+from .containers.redis import RedisContainers
 from .handlers import common, ordering_message
-from .middlewares.spam import SpamMiddleware
+
+# from .middlewares.spam import SpamMiddleware
 
 logger = get_logger(__name__, "bot.log")
 
 
 async def starter(token: str) -> Bot:
-    redis_middleware = SpamMiddleware()
-    storage = RedisStorage(redis=redis_middleware.client)
+    redis_container = RedisContainers()
+    redis_client = redis_container.redis_client()
+    spam_middleware = redis_container.spam_middlewares()
+
+    storage = RedisStorage(redis=redis_client.client)
     dp = Dispatcher(storage=storage)
-    dp.message.middleware.register(redis_middleware)
+    dp.message.middleware.register(spam_middleware)
 
     logger.info("Enter token...")
     try:
