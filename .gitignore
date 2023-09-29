@@ -1,10 +1,11 @@
 venv/
 data/
 .ipynb_checkpoints/
-./models/
+/models
 __pycache__/
 logs/
 config/
+train_llm/models
 
 *.zip
 .env

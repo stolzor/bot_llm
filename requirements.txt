@@ -18,3 +18,5 @@ fastapi==0.103.1
 asyncpg==0.28.0
 sqlalchemy==2.0.20
 pydantic-settings==2.0.3
+uvicorn==0.23.2
+dependency_injector==4.41.0
