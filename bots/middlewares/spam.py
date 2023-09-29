@@ -1,18 +1,19 @@
-from typing import Dict, Awaitable, Callable, Any
+from typing import Any, Awaitable, Callable, Dict
 
-from aiogram.types import TelegramObject, Message
+from aiogram import BaseMiddleware
+from aiogram.types import Message, TelegramObject
+from aioredis.client import Redis
 
-from .redis import RedisMiddleware
 from logger import get_logger
-
 
 logger = get_logger(__name__, "bot.log")
 
 
-class SpamMiddleware(RedisMiddleware):
-    def __init__(self, *args, **kwargs) -> None:
+class SpamMiddleware(BaseMiddleware):
+    def __init__(self, client: Redis, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         logger.info("Init Spam middleware")
+        self.client: Redis = client
 
     async def __call__(
         self,
