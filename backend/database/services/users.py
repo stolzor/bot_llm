@@ -11,6 +11,3 @@ class UserService:
 
     async def get_user(self, **kwargs) -> Users:
         return await self._repository.get(**kwargs)
-
-    async def get_users(self, **kwargs) -> Users:
-        return await self._repository.get_users(**kwargs)

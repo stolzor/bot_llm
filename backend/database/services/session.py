@@ -12,5 +12,5 @@ class SessionService:
     async def get_session(self, **kwargs) -> Session:
         return await self._repository.get(**kwargs)
 
-    async def get_sessions(self, **kwargs) -> Session:
-        return await self._repository.get_users(**kwargs)
+    async def update_session(self, **kwargs) -> Session:
+        return await self._repository.put(**kwargs)

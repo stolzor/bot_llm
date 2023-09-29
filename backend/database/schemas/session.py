@@ -4,8 +4,8 @@ from pydantic import BaseModel
 
 
 class SessionBase(BaseModel):
-    id: int
     session_id: int
+    count_message: int
 
 
 class SessionCreate(SessionBase):
@@ -20,7 +20,7 @@ class SessionUpdate(SessionBase):
 
 
 class Session(SessionCreate, SessionUpdate):
-    ...
+    id: int
 
     class Config:
         from_attributes = True

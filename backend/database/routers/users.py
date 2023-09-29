@@ -11,7 +11,7 @@ from ..utils import orm2dict
 router = APIRouter(tags=["users"])
 
 
-@router.post("/users", response_model=User)
+@router.post("/api/v1/users", response_model=User)
 @inject
 async def create_user(
     user: UserCreate,
@@ -26,7 +26,7 @@ async def create_user(
     return await user_service.create_user(**params)
 
 
-@router.get("/users/{user_id}", response_model=User)
+@router.get("/api/v1/users/{user_id}", response_model=User)
 @inject
 async def get_user(
     user_id: int,
@@ -41,7 +41,7 @@ async def get_user(
     return user
 
 
-@router.get("/users/", response_model=List[User])
+@router.get("/api/v1/users/", response_model=List[User])
 @inject
 async def get_users(
     limit: int,
@@ -49,7 +49,7 @@ async def get_users(
 ):
     params = dict(limit=limit)
 
-    users = [i for i in await user_service.get_users(**params)]
+    users = [i for i in await user_service.get_user(**params)]
 
     if users is None:
         raise HTTPException(status_code=404, detail="User not found")

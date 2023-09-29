@@ -16,3 +16,4 @@ class Session(OrmBase):
     user_date: Mapped[datetime] = mapped_column(DateTime)
     ai_message: Mapped[str] = mapped_column(String, nullable=True)
     ai_date: Mapped[datetime] = mapped_column(DateTime, nullable=True)
+    count_message: Mapped[int] = mapped_column(Integer, default=0)

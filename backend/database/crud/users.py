@@ -1,4 +1,4 @@
-from typing import AsyncContextManager, Callable, List
+from typing import AsyncContextManager, Callable
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -20,10 +20,10 @@ class UsersRepository:
         return user
 
     async def get(self, **kwargs) -> Users:
-        user = await self.session.get(Users, kwargs["id"])
-        return user
+        if "limit" in kwargs.keys():
+            query = select(Users).limit(kwargs["limit"])
+            user = await self.session.execute(query)
+        else:
+            user = await self.session.get(Users, kwargs["id"])
 
-    async def get_users(self, **kwargs) -> List[Users]:
-        query = select(Users).limit(kwargs["limit"])
-        users = await self.session.execute(query)
-        return users
+        return user
